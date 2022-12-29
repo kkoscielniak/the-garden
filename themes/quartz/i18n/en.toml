@@ -19,9 +19,6 @@ other = "showing first 10 results"
 [tag]
 other = "Tag"
 
-[backlinks]
-other = "Backlinks"
-
 [no_backlinks]
 other = "No backlinks found"
 
@@ -36,9 +33,6 @@ other = "Dark Mode"
 
 [edit_source]
 other = "Edit Source"
-
-[interactive_graph]
-other = "Interactive Graph"
 
 [search]
 other = "Search"
