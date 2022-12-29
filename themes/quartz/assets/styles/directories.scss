@@ -1,0 +1,48 @@
+.directories {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  padding-top: 1.25em;
+
+  .items {
+    display: inline-flex;
+    flex-direction: row;
+
+    flex-wrap: wrap;
+
+    column-gap: 2em;
+
+    margin-top: 1em;
+    row-gap: 0.5em;
+
+    @media (max-width: 40em) {
+    }
+  }
+}
+
+.item {
+  flex-basis: calc(50% - 1em);
+
+  @media (max-width: 40em) {
+    flex-basis: calc(100% - 1em);
+  }
+}
+
+// h2
+//   font-size: 2.7rem
+//   margin: 0 0 .75rem
+
+// .row
+//   .item,
+//   .none
+//     white-space: nowrap
+//     overflow: hidden
+//     text-overflow: ellipsis
+//     font-size: 1.7rem
+//     margin-bottom: .5rem
+//   .none
+//     font-style: italic
+//     opacity: .4
+//   .item + .none
+//     display: none

@@ -1,0 +1,10 @@
+<div class="directories">
+  <h3>Index<span>_</span></h3> 
+  <div class="items">
+  {{- range . -}}    
+      <div class="item">
+        {{ partial "file.html" . }}
+      </div>
+  {{- end -}}
+  </div>
+</div>
