@@ -270,11 +270,6 @@ article {
   }
 }
 
-.backlinks a {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
 sup > a {
   text-decoration: none;
   padding: 0 0.1em 0 0.2em;
@@ -356,12 +351,17 @@ hr {
       list-style: none;
       padding: 0;
       margin: 0;
+      margin-top: 1em;
+
+      display: flex;
+      flex-direction: column;
+      row-gap: 0.5em;
 
       & > li {
-        margin: 0.5em 0;
-        padding: 0.25em 1em;
-        border: var(--outlinegray) 1px solid;
-        border-radius: 5px;
+        // margin: 0.5em 0;
+        // padding: 0.25em 1em;
+        // border: var(--outlinegray) 1px solid;
+        // border-radius: 5px;
       }
     }
   }
