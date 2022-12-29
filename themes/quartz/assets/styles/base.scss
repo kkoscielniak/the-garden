@@ -357,6 +357,10 @@ hr {
       flex-direction: column;
       row-gap: 0.5em;
     }
+
+    & li {
+      line-height: 1.2em;
+    }
   }
 
   & #graph-container {
