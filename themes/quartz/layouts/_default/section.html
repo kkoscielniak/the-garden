@@ -10,8 +10,7 @@
       <article>
         <h1>{{ i18n "all_posts" . }}</h1>
         {{ partial "textprocessing.html" . }}
-        {{ partial "page-list.html" .Paginator.Pages.ByLastmod.Reverse }} 
-        {{ template "_internal/pagination.html" .}}
+        {{ partial "directories.html" .Pages }}
       </article>
       {{partial "contact.html" .}}
     </div>

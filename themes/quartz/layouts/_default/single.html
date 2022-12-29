@@ -21,6 +21,7 @@
       {{partial "toc.html" .}}
       {{partial "textprocessing.html" . }}
     </article>
+    {{ partial "directories.html" .Page.Parent.Pages }}
     {{partial "footer.html" .}}
 </div>
 </body>
