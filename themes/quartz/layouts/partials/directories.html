@@ -1,7 +1,7 @@
 <div class="directories">
   <h3>index<span>_</span></h3> 
   <div class="items">
-  {{- range . -}}    
+  {{- range .ByWeight -}}    
       <div class="item">
         {{ partial "file.html" . }}
       </div>
