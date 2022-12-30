@@ -4,9 +4,8 @@
 <!-- Contact Info -->
 <div id="contact_buttons">
     <footer>
-        {{ $name := $data.name | default $.Site.Data.config.name }}
-        {{ $year := dateFormat "2006" now }}
-        <p>{{ i18n "copyright" (dict "name" $name "year" $year) | safeHTML}}</p>
+        {{/*  {{ $year := dateFormat "2006" now }}  */}}
+        <p>crafted by kkoscielniak. built using <a href="https://github.com/jackyzha0/quartz">quartz</a></p>
         <ul>
             {{ if not .IsHome }}
             <li><a href="{{ $.Site.BaseURL}}">{{ i18n "home" }}</a></li>
