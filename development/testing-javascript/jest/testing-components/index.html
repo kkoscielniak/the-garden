@@ -1,0 +1,785 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=description content="New ways of using @testing-library/react  Don&rsquo;t return getBy... methods from render(<Component />. Use screen export instead userEvent is better than fireEvent Use waitFor instead of wait."><title>Testing components with Jest and React Testing Library</title><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" type=image/png href=https://kkoscielniak.github.io/the-garden/icon.png><link href=https://kkoscielniak.github.io/the-garden/styles.9795826ea4fa61978dfd826a4365a859.min.css rel=stylesheet><link href=https://kkoscielniak.github.io/the-garden/styles/_light_syntax.86a48a52faebeaaf42158b72922b1c90.min.css rel=stylesheet id=theme-link><script src=https://kkoscielniak.github.io/the-garden/js/darkmode.6f1f2bb1a0c0737573887beb29fddf40.min.js></script>
+<script src=https://kkoscielniak.github.io/the-garden/js/util.5e39932758f9ecaf45fd54506ed61416.min.js></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css integrity=sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js integrity=sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js integrity=sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/copy-tex.min.js integrity=sha384-ww/583aHhxWkz5DEVn6OKtNiIaLi2iBRNZXfJRiY1Ai7tnJ9UXpEsyvOITVpTl4A crossorigin=anonymous></script>
+<script src=https://unpkg.com/@floating-ui/core@0.7.3></script>
+<script src=https://unpkg.com/@floating-ui/dom@0.5.4></script>
+<script src=https://kkoscielniak.github.io/the-garden/js/popover.6da9b273c092cc16fc1aa904d71a2163.min.js></script>
+<script src=https://kkoscielniak.github.io/the-garden/js/code-title.b35124ad8db0ba37162b886afb711cbc.min.js></script>
+<script src=https://kkoscielniak.github.io/the-garden/js/clipboard.c20857734e53a3fb733b7443879efa61.min.js></script>
+<script src=https://kkoscielniak.github.io/the-garden/js/callouts.7723cac461d613d118ee8bb8216b9838.min.js></script>
+<script>const SEARCH_ENABLED=!1,LATEX_ENABLED=!0,PRODUCTION=!0,BASE_URL="https://kkoscielniak.github.io/the-garden",fetchData=Promise.all([fetch("https://kkoscielniak.github.io/the-garden/indices/linkIndex.2486ce7d2118e21ae86de73a11b924e3.min.json").then(e=>e.json()).then(e=>({index:e.index,links:e.links})),fetch("https://kkoscielniak.github.io/the-garden/indices/contentIndex.4d8bd44dd5b91590ba7fb007adf7cfe2.min.json").then(e=>e.json())]).then(([{index:e,links:t},n])=>({index:e,links:t,content:n})),render=()=>{const e=new URL(BASE_URL),t=e.pathname,n=window.location.pathname,s=t==n;addCopyButtons(),addTitleToCodeBlocks(),addCollapsibleCallouts();const o=document.getElementById("footer");if(o){const e=document.getElementById("graph-container");if(!e)return requestAnimationFrame(render);e.textContent="";const t=s&&!1;drawGraph("https://kkoscielniak.github.io/the-garden",t,[{"/moc":"#4388cc"}],t?{centerForce:1,depth:-1,enableDrag:!0,enableLegend:!1,enableZoom:!0,fontSize:.5,linkDistance:1,opacityScale:3,repelForce:1,scale:1.4}:{centerForce:1,depth:1,enableDrag:!0,enableLegend:!1,enableZoom:!0,fontSize:.6,linkDistance:1,opacityScale:3,repelForce:2,scale:1.2})}var i=document.getElementsByClassName("mermaid");i.length>0&&import("https://unpkg.com/mermaid@9/dist/mermaid.esm.min.mjs").then(e=>{e.default.init()})},init=(e=document)=>{addCopyButtons(),addTitleToCodeBlocks(),renderMathInElement(e.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}],macros:{'’':"'"},throwOnError:!1})}</script><script type=module>
+    import { attachSPARouting } from "https:\/\/kkoscielniak.github.io\/the-garden\/js\/router.9d4974281069e9ebb189f642ae1e3ca2.min.js"
+    attachSPARouting(init, render)
+  </script></head><body><div id=search-container><div id=search-space><input autocomplete=off id=search-bar name=search type=text aria-label=Search placeholder="Search for something..."><div id=results-container></div></div></div><script src=https://cdn.jsdelivr.net/npm/flexsearch@0.7.21/dist/flexsearch.bundle.js integrity="sha256-i3A0NZGkhsKjVMzFxv3ksk0DZh3aXqu0l49Bbh0MdjE=" crossorigin=anonymous defer></script>
+<script defer src=https://kkoscielniak.github.io/the-garden/js/full-text-search.51f0b1753e9b30839d053f8a98cc20d1.min.js></script><div class=singlePage><header><h1 id=page-title><a href=https://kkoscielniak.github.io/the-garden>🍍 koscielniak.pro</a></h1><div class=spacer></div><div id=search-icon><p>⌘+K</p><svg tabindex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search Icon</title><desc id="desc">Icon to open search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"/><circle cx="8" cy="8" r="7"/></g></svg></div><div class=darkmode><input class=toggle id=darkmode-toggle type=checkbox tabindex=-1>
+<label id=toggle-label-light for=darkmode-toggle tabindex=-1><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="dayIcon" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35"><title>Light Mode</title><path d="M6 17.5C6 16.672 5.328 16 4.5 16h-3C.672 16 0 16.672.0 17.5S.672 19 1.5 19h3C5.328 19 6 18.328 6 17.5zM7.5 26c-.414.0-.789.168-1.061.439l-2 2C4.168 28.711 4 29.086 4 29.5 4 30.328 4.671 31 5.5 31c.414.0.789-.168 1.06-.44l2-2C8.832 28.289 9 27.914 9 27.5 9 26.672 8.329 26 7.5 26zm10-20C18.329 6 19 5.328 19 4.5v-3C19 .672 18.329.0 17.5.0S16 .672 16 1.5v3C16 5.328 16.671 6 17.5 6zm10 3c.414.0.789-.168 1.06-.439l2-2C30.832 6.289 31 5.914 31 5.5 31 4.672 30.329 4 29.5 4c-.414.0-.789.168-1.061.44l-2 2C26.168 6.711 26 7.086 26 7.5 26 8.328 26.671 9 27.5 9zM6.439 8.561C6.711 8.832 7.086 9 7.5 9 8.328 9 9 8.328 9 7.5c0-.414-.168-.789-.439-1.061l-2-2C6.289 4.168 5.914 4 5.5 4 4.672 4 4 4.672 4 5.5c0 .414.168.789.439 1.06l2 2.001zM33.5 16h-3c-.828.0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5h3c.828.0 1.5-.672 1.5-1.5S34.328 16 33.5 16zM28.561 26.439C28.289 26.168 27.914 26 27.5 26c-.828.0-1.5.672-1.5 1.5.0.414.168.789.439 1.06l2 2C28.711 30.832 29.086 31 29.5 31c.828.0 1.5-.672 1.5-1.5.0-.414-.168-.789-.439-1.061l-2-2zM17.5 29c-.829.0-1.5.672-1.5 1.5v3c0 .828.671 1.5 1.5 1.5s1.5-.672 1.5-1.5v-3C19 29.672 18.329 29 17.5 29zm0-22C11.71 7 7 11.71 7 17.5S11.71 28 17.5 28 28 23.29 28 17.5 23.29 7 17.5 7zm0 18c-4.136.0-7.5-3.364-7.5-7.5s3.364-7.5 7.5-7.5 7.5 3.364 7.5 7.5S21.636 25 17.5 25z"/></svg></label><label id=toggle-label-dark for=darkmode-toggle tabindex=-1><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="nightIcon" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'"><title>Dark Mode</title><path d="M96.76 66.458c-.853-.852-2.15-1.064-3.23-.534-6.063 2.991-12.858 4.571-19.655 4.571C62.022 70.495 50.88 65.88 42.5 57.5 29.043 44.043 25.658 23.536 34.076 6.47c.532-1.08.318-2.379-.534-3.23-.851-.852-2.15-1.064-3.23-.534-4.918 2.427-9.375 5.619-13.246 9.491-9.447 9.447-14.65 22.008-14.65 35.369.0 13.36 5.203 25.921 14.65 35.368s22.008 14.65 35.368 14.65c13.361.0 25.921-5.203 35.369-14.65 3.872-3.871 7.064-8.328 9.491-13.246C97.826 68.608 97.611 67.309 96.76 66.458z"/></svg></label></div></header><article><h1>Testing components with Jest and React Testing Library</h1><p class=meta>Last updated
+Unknown
+<a href=https://github.com/kkoscielniak/the-digital-garden/development/testing-javascript/jest/testing-components.md rel=noopener>Edit Source</a></p><ul class=tags></ul><aside class=mainTOC><details><summary>Table of Contents</summary><nav id=TableOfContents><ol><li><a href=#new-ways-of-using-testing-libraryreact>New ways of using <code>@testing-library/react</code></a></li><li><a href=#using-jest-dom>Using <code>jest-dom</code></a></li><li><a href=#using-dom-testing-library-to-write-more-maintainable-tests>Using DOM Testing Library to write more maintainable tests</a></li><li><a href=#using-testing-libraryreact-for-rendering>Using <code>@testing-library/react</code> for rendering</a></li><li><a href=#react-testing-librarys-debug-fn>React Testing Library&rsquo;s <code>debug</code> fn</a></li><li><a href=#testing-event-handlers-with-userevent>Testing Event Handlers with <code>userEvent</code></a></li><li><a href=#test-props-updates>Test props updates</a><ol><li><a href=#the-difference-between-getby-and-queryby>The difference between <code>getBy...</code> and <code>queryBy...</code></a></li></ol></li><li><a href=#test-accessibility>Test accessibility</a></li><li><a href=#test-componentdidcatch-error-boundary-handler>Test <code>componentDidCatch</code> Error Boundary handler</a><ol><li><a href=#ensure-error-boundaries-can-successfully-recover-from-errors>Ensure Error Boundaries can successfully recover from Errors</a></li></ol></li><li><a href=#mock-react-transition-group>Mock <code>react-transition-group</code></a></li><li><a href=#wrappers>Wrappers</a></li><li><a href=#mock-http-with-jestmock>Mock HTTP with <code>jest.mock</code></a></li><li><a href=#mocking-http-with-msw>Mocking HTTP with <code>msw</code></a></li><li><a href=#custom-rendercomponent-fns-to-simplify-tests>Custom <code>renderComponent</code> fns to simplify tests</a></li><li><a href=#custom-history-implementation-within-react-router>Custom <code>history</code> implementation within <code>react-router</code></a></li><li><a href=#testing-the-unmounting-of-the-component>Testing the unmounting of the component</a></li></ol></nav></details></aside><a href=#new-ways-of-using-testing-libraryreact><h2 id=new-ways-of-using-testing-libraryreact><span class=hanchor arialabel=Anchor># </span>New ways of using <code>@testing-library/react</code></h2></a><ul><li>Don&rsquo;t return <code>getBy...</code> methods from <code>render(&lt;Component /></code>. Use <code>screen</code> export instead</li><li><code>userEvent</code> is better than <code>fireEvent</code></li><li>Use <code>waitFor</code> instead of <code>wait</code>. They are <em>same</em> but <code>waitFor</code> offers more possibilities</li></ul><a href=#using-jest-dom><h2 id=using-jest-dom><span class=hanchor arialabel=Anchor># </span>Using <code>jest-dom</code></h2></a><p><code>jest-dom</code> provides really useful extensions to jest’s built-in assertion library that will make it easier for us to write our test assertions (like <code>toHaveTextContent</code>).</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=nx>ReactDOM</span> <span class=kr>from</span> <span class=s2>&#34;react-dom&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=s2>&#34;@testing-library/jest-dom&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>FavoriteNumber</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../favorite-number&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s1>&#39;renders a number input with a label &#34;Favorite Number&#34;&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>div</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>createElement</span><span class=p>(</span><span class=s2>&#34;div&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>ReactDOM</span><span class=p>.</span><span class=nx>render</span><span class=p>(&lt;</span><span class=nt>FavoriteNumber</span> <span class=p>/&gt;,</span> <span class=nx>div</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>div</span><span class=p>.</span><span class=nx>querySelector</span><span class=p>(</span><span class=s2>&#34;input&#34;</span><span class=p>)).</span><span class=nx>toHaveAttribute</span><span class=p>(</span><span class=s2>&#34;type&#34;</span><span class=p>,</span> <span class=s2>&#34;number&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>div</span><span class=p>.</span><span class=nx>querySelector</span><span class=p>(</span><span class=s2>&#34;label&#34;</span><span class=p>)).</span><span class=nx>toHaveTextContent</span><span class=p>(</span><span class=s2>&#34;Favorite Number&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote class=tip-callout><p>KCD configured the test files to import <code>@testing-library/*</code> automatically</p><p>That&rsquo;s why that import is missing from the examples</p></blockquote><a href=#using-dom-testing-library-to-write-more-maintainable-tests><h2 id=using-dom-testing-library-to-write-more-maintainable-tests><span class=hanchor arialabel=Anchor># </span>Using DOM Testing Library to write more maintainable tests</h2></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=nx>ReactDOM</span> <span class=kr>from</span> <span class=s2>&#34;react-dom&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>getQueriesForElement</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/dom&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>FavoriteNumber</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../favorite-number&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s1>&#39;renders a number input with a label &#34;Favorite Number&#34;&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>div</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>createElement</span><span class=p>(</span><span class=s2>&#34;div&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>ReactDOM</span><span class=p>.</span><span class=nx>render</span><span class=p>(&lt;</span><span class=nt>FavoriteNumber</span> <span class=p>/&gt;,</span> <span class=nx>div</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>{</span> <span class=nx>getByLabelText</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>getQueriesForElement</span><span class=p>(</span><span class=nx>div</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>input</span> <span class=o>=</span> <span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/favorite number/i</span><span class=p>);</span> <span class=c1>// /i -&gt; case insensitive
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>expect</span><span class=p>(</span><span class=nx>input</span><span class=p>).</span><span class=nx>toHaveAttribute</span><span class=p>(</span><span class=s2>&#34;type&#34;</span><span class=p>,</span> <span class=s2>&#34;number&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#using-testing-libraryreact-for-rendering><h2 id=using-testing-libraryreact-for-rendering><span class=hanchor arialabel=Anchor># </span>Using <code>@testing-library/react</code> for rendering</h2></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>render</span><span class=p>,</span> <span class=nx>screen</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>FavoriteNumber</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../favorite-number&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s1>&#39;renders a number input with a label &#34;Favorite Number&#34;&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>FavoriteNumber</span> <span class=p>/&gt;);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>input</span> <span class=o>=</span> <span class=nx>screen</span><span class=p>.</span><span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/favorite number/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>input</span><span class=p>).</span><span class=nx>toHaveAttribute</span><span class=p>(</span><span class=s2>&#34;type&#34;</span><span class=p>,</span> <span class=s2>&#34;number&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#react-testing-librarys-debug-fn><h2 id=react-testing-librarys-debug-fn><span class=hanchor arialabel=Anchor># </span>React Testing Library&rsquo;s <code>debug</code> fn</h2></a><p><code>debug(renderedComponent = null)</code> will <code>console.log</code> the HTML code for all rendered components (unless one is provided as an argument).</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>render</span><span class=p>,</span> <span class=nx>screen</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>FavoriteNumber</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../favorite-number&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s1>&#39;renders a number input with a label &#34;Favorite Number&#34;&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>FavoriteNumber</span> <span class=p>/&gt;);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>input</span> <span class=o>=</span> <span class=nx>screen</span><span class=p>.</span><span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/favorite number/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>input</span><span class=p>).</span><span class=nx>toHaveAttribute</span><span class=p>(</span><span class=s2>&#34;type&#34;</span><span class=p>,</span> <span class=s2>&#34;number&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>screen</span><span class=p>.</span><span class=nx>debug</span><span class=p>();</span> <span class=c1>// &lt;-- w/o arg
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// screen.debug(input); // &lt;-- with arg
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#testing-event-handlers-with-userevent><h2 id=testing-event-handlers-with-userevent><span class=hanchor arialabel=Anchor># </span>Testing Event Handlers with <code>userEvent</code></h2></a><p><code>userEvent</code> fn more closely resebles the way the users interact with tested components than <code>fireEvent</code> itself.</p><p><code>userEvent.type</code> internally fires a bunch of <code>fireEvent</code>s to mimic human behavior. It follows <code>async/await</code> pattern.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>render</span><span class=p>,</span> <span class=nx>screen</span><span class=p>,</span> <span class=nx>fireEvent</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=nx>userEvent</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/user-event&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>FavoriteNumber</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../favorite-number&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;entering an invalid value shows an error message&#34;</span><span class=p>,</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>FavoriteNumber</span> <span class=p>/&gt;);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>input</span> <span class=o>=</span> <span class=nx>screen</span><span class=p>.</span><span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/favorite number/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// fireEvent.change(input, {target: {value: &#39;10&#39;}})
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>await</span> <span class=nx>userEvent</span><span class=p>.</span><span class=kr>type</span><span class=p>(</span><span class=nx>input</span><span class=p>,</span> <span class=s2>&#34;10&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// `FavoriteNumber` contains a `div` with `role=&#34;alert&#34;` defined for accessibility purposes
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>getByRole</span><span class=p>(</span><span class=s2>&#34;alert&#34;</span><span class=p>)).</span><span class=nx>toHaveTextContent</span><span class=p>(</span><span class=sr>/the number is invalid/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#test-props-updates><h2 id=test-props-updates><span class=hanchor arialabel=Anchor># </span>Test props updates</h2></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=nx>user</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/user-event&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>render</span><span class=p>,</span> <span class=nx>screen</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>FavoriteNumber</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../favorite-number&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;entering an invalid value shows an error message&#34;</span><span class=p>,</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>{</span> <span class=nx>rerender</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>FavoriteNumber</span> <span class=p>/&gt;);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>input</span> <span class=o>=</span> <span class=nx>screen</span><span class=p>.</span><span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/favorite number/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>await</span> <span class=nx>user</span><span class=p>.</span><span class=kr>type</span><span class=p>(</span><span class=nx>input</span><span class=p>,</span> <span class=s2>&#34;10&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>getByRole</span><span class=p>(</span><span class=s2>&#34;alert&#34;</span><span class=p>)).</span><span class=nx>toHaveTextContent</span><span class=p>(</span><span class=sr>/the number is invalid/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>rerender</span><span class=p>(&lt;</span><span class=nt>FavoriteNumber</span> <span class=na>max</span><span class=o>=</span><span class=p>{</span><span class=mi>10</span><span class=p>}</span> <span class=p>/&gt;);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>queryByRole</span><span class=p>(</span><span class=s2>&#34;alert&#34;</span><span class=p>)).</span><span class=nx>not</span><span class=p>.</span><span class=nx>toBeInTheDocument</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#the-difference-between-getby-and-queryby><h3 id=the-difference-between-getby-and-queryby><span class=hanchor arialabel=Anchor># </span>The difference between <code>getBy...</code> and <code>queryBy...</code></h3></a><p><code>getBy...</code> will throw an <code>Error</code> if it didn&rsquo;t find queried element. <code>queryBy...</code> will return <code>null</code> instead.</p><p>Usually it&rsquo;s better to use <code>getBy...</code> to have a nice error messages in Jest&rsquo;s output, but occasionally assertions using <code>queryBy...</code> will be easier to read.</p><a href=#test-accessibility><h2 id=test-accessibility><span class=hanchor arialabel=Anchor># </span>Test accessibility</h2></a><p>Not all of accessibility testing of a web application can be automated, but much of it can be using 
+<a href=https://github.com/nickcolley/jest-axe rel=noopener>jest-axe</a>.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=s2>&#34;jest-axe/extend-expect&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>render</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>axe</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;jest-axe&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;inaccessible forms fail axe&#34;</span><span class=p>,</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>{</span> <span class=nx>container</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>InaccessibleForm</span> <span class=p>/&gt;);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>axeResult</span> <span class=o>=</span> <span class=k>await</span> <span class=nx>axe</span><span class=p>(</span><span class=nx>container</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=nx>expect</span><span class=p>(</span><span class=nx>axeResult</span><span class=p>).</span><span class=nx>toHaveNoViolations</span><span class=p>()).</span><span class=nx>toThrow</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;accessible forms pass axe&#34;</span><span class=p>,</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>{</span> <span class=nx>container</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>AccessibleForm</span> <span class=p>/&gt;);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=k>await</span> <span class=nx>axe</span><span class=p>(</span><span class=nx>container</span><span class=p>)).</span><span class=nx>toHaveNoViolations</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#test-componentdidcatch-error-boundary-handler><h2 id=test-componentdidcatch-error-boundary-handler><span class=hanchor arialabel=Anchor># </span>Test <code>componentDidCatch</code> Error Boundary handler</h2></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>render</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>reportError</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../api&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>ErrorBoundary</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../error-boundary&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>jest</span><span class=p>.</span><span class=nx>mock</span><span class=p>(</span><span class=s2>&#34;../api&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>afterEach</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>jest</span><span class=p>.</span><span class=nx>clearAllMocks</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>Bomb</span><span class=p>({</span> <span class=nx>shouldThrow</span> <span class=p>})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>shouldThrow</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=s2>&#34;💣&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;calls reportError and renders that there was a problem&#34;</span><span class=p>,</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>reportError</span><span class=p>.</span><span class=nx>mockResolvedValueOnce</span><span class=p>({</span> <span class=nx>success</span>: <span class=kt>true</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>{</span> <span class=nx>rerender</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>render</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>ErrorBoundary</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>Bomb</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>ErrorBoundary</span><span class=p>&gt;,</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>rerender</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>ErrorBoundary</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>Bomb</span> <span class=na>shouldThrow</span><span class=o>=</span><span class=p>{</span><span class=kc>true</span><span class=p>}</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>ErrorBoundary</span><span class=p>&gt;,</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>error</span> <span class=o>=</span> <span class=nx>expect</span><span class=p>.</span><span class=kt>any</span><span class=p>(</span><span class=nb>Error</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>info</span> <span class=o>=</span> <span class=p>{</span> <span class=nx>componentStack</span>: <span class=kt>expect.stringContaining</span><span class=p>(</span><span class=s2>&#34;Bomb&#34;</span><span class=p>)</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>reportError</span><span class=p>).</span><span class=nx>toHaveBeenCalledWith</span><span class=p>(</span><span class=nx>error</span><span class=p>,</span> <span class=nx>info</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>reportError</span><span class=p>).</span><span class=nx>toHaveBeenCalledTimes</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>).</span><span class=nx>toHaveBeenCalledTimes</span><span class=p>(</span><span class=mi>2</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>It&rsquo;s possible to suppress <code>console.error</code> from the Error Boundary component. Useful for omitting the <code>console.error</code> messages in test results, if the formers make the latters messy.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=nx>beforeEach</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>jest</span><span class=p>.</span><span class=nx>spyOn</span><span class=p>(</span><span class=nx>console</span><span class=p>,</span> <span class=s2>&#34;error&#34;</span><span class=p>).</span><span class=nx>mockImplementation</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{});</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>afterEach</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>.</span><span class=nx>mockRestore</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#ensure-error-boundaries-can-successfully-recover-from-errors><h3 id=ensure-error-boundaries-can-successfully-recover-from-errors><span class=hanchor arialabel=Anchor># </span>Ensure Error Boundaries can successfully recover from Errors</h3></a><p>Thanks to <code>.mockClear()</code> we can <em>reset</em> how many times the fn was called:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;calls reportError and renders that there was a problem, then recovers from &#34;</span><span class=p>,</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/* ... */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// here we are clearing out the mocks
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>.</span><span class=nx>mockClear</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=nx>mockReportError</span><span class=p>.</span><span class=nx>mockClear</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>rerender</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>ErrorBoundary</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>Bomb</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>ErrorBoundary</span><span class=p>&gt;,</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>userEvent</span><span class=p>.</span><span class=nx>click</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>getByText</span><span class=p>(</span><span class=sr>/try again/i</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>mockReportError</span><span class=p>).</span><span class=nx>not</span><span class=p>.</span><span class=nx>toHaveBeenCalled</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>).</span><span class=nx>not</span><span class=p>.</span><span class=nx>toHaveBeenCalled</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>queryByRole</span><span class=p>(</span><span class=s2>&#34;alert&#34;</span><span class=p>)).</span><span class=nx>not</span><span class=p>.</span><span class=nx>toBeInTheDocument</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>queryByText</span><span class=p>(</span><span class=sr>/try again/i</span><span class=p>)).</span><span class=nx>not</span><span class=p>.</span><span class=nx>toBeInTheDocument</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#mock-react-transition-group><h2 id=mock-react-transition-group><span class=hanchor arialabel=Anchor># </span>Mock <code>react-transition-group</code></h2></a><p>Given the Component:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=c1>// hidden-message.tsx
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>CSSTransition</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;react-transition-group&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>Fade</span><span class=p>(</span><span class=nx>props</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>CSSTransition</span> <span class=na>unmountOnExit</span> <span class=na>timeout</span><span class=o>=</span><span class=p>{</span><span class=mi>1000</span><span class=p>}</span> <span class=na>classNames</span><span class=o>=</span><span class=s>&#34;fade&#34;</span> <span class=p>{</span><span class=na>...props</span><span class=p>}</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>HiddenMessage</span><span class=p>({</span> <span class=nx>children</span> <span class=p>})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>[</span><span class=nx>show</span><span class=p>,</span> <span class=nx>setShow</span><span class=p>]</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>useState</span><span class=p>(</span><span class=kc>false</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>toggle</span> <span class=o>=</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=nx>setShow</span><span class=p>((</span><span class=nx>s</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=o>!</span><span class=nx>s</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>button</span> <span class=na>onClick</span><span class=o>=</span><span class=p>{</span><span class=nx>toggle</span><span class=p>}&gt;</span><span class=nx>Toggle</span><span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>Fade</span> <span class=na>in</span><span class=o>=</span><span class=p>{</span><span class=nx>show</span><span class=p>}&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;{</span><span class=nx>children</span><span class=p>}&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;/</span><span class=nt>Fade</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=p>{</span> <span class=nx>HiddenMessage</span> <span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>In the case of <code>react-transition-group</code>, we don’t want to have to wait <code>1000ms</code> until the transition has completed before we can go on with our tests. We can mock <code>react-transition-group</code> implementation to do so:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>render</span><span class=p>,</span> <span class=nx>screen</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=nx>userEvent</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/user-event&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>HiddenMessage</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../hidden-message&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>jest</span><span class=p>.</span><span class=nx>mock</span><span class=p>(</span><span class=s2>&#34;react-transition-group&#34;</span><span class=p>,</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>CSSTransition</span><span class=o>:</span> <span class=p>(</span><span class=nx>props</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>(</span><span class=nx>props</span><span class=p>.</span><span class=k>in</span> <span class=o>?</span> <span class=nx>props.children</span> : <span class=kt>null</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;shows hidden message when toggle is clicked&#34;</span><span class=p>,</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>myMessage</span> <span class=o>=</span> <span class=s2>&#34;hello world&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>HiddenMessage</span><span class=p>&gt;{</span><span class=nx>myMessage</span><span class=p>}&lt;/</span><span class=nt>HiddenMessage</span><span class=p>&gt;);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>toggleButton</span> <span class=o>=</span> <span class=nx>screen</span><span class=p>.</span><span class=nx>getByText</span><span class=p>(</span><span class=sr>/toggle/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>queryByText</span><span class=p>(</span><span class=nx>myMessage</span><span class=p>)).</span><span class=nx>not</span><span class=p>.</span><span class=nx>toBeInTheDocument</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=nx>userEvent</span><span class=p>.</span><span class=nx>click</span><span class=p>(</span><span class=nx>toggleButton</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>getByText</span><span class=p>(</span><span class=nx>myMessage</span><span class=p>)).</span><span class=nx>toBeInTheDocument</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=nx>userEvent</span><span class=p>.</span><span class=nx>click</span><span class=p>(</span><span class=nx>toggleButton</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>queryByText</span><span class=p>(</span><span class=nx>myMessage</span><span class=p>)).</span><span class=nx>not</span><span class=p>.</span><span class=nx>toBeInTheDocument</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>When we mock something, we want to make the mock as close to original function as possible.</p><a href=#wrappers><h2 id=wrappers><span class=hanchor arialabel=Anchor># </span>Wrappers</h2></a><p>Wrappers are a nice to have to avoid code repetition:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;calls reportError and renders that there was a problem&#34;</span><span class=p>,</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// [...]
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=p>{</span> <span class=nx>rerender</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>Bomb</span> <span class=p>/&gt;,</span> <span class=p>{</span> <span class=nx>wrapper</span>: <span class=kt>ErrorBoundary</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// [...]
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#mock-http-with-jestmock><h2 id=mock-http-with-jestmock><span class=hanchor arialabel=Anchor># </span>Mock HTTP with <code>jest.mock</code></h2></a><p>If we have a component that makes HTTP request we want to mock those out for UI unit and integration tests:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=c1>// greeting-loader.tsx
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>loadGreeting</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;./api&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>GreetingLoader() {</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>[</span><span class=nx>greeting</span><span class=p>,</span> <span class=nx>setGreeting</span><span class=p>]</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>useState</span><span class=p>&lt;</span><span class=nt>string</span><span class=p>&gt;(</span><span class=s2>&#34;&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>async</span> <span class=kd>function</span> <span class=nx>loadGreetingForInput</span><span class=p>(</span><span class=nx>e</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>e</span><span class=p>.</span><span class=nx>preventDefault</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=p>{</span> <span class=nx>data</span> <span class=p>}</span><span class=o>:</span> <span class=p>{</span> <span class=nx>data</span><span class=o>:</span> <span class=p>{</span> <span class=nx>greeting</span>: <span class=kt>string</span> <span class=p>}</span> <span class=p>}</span> <span class=o>=</span> <span class=k>await</span> <span class=nx>loadGreeting</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=nx>e</span><span class=p>.</span><span class=nx>target</span><span class=p>.</span><span class=nx>elements</span><span class=p>.</span><span class=nx>name</span><span class=p>.</span><span class=nx>value</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>setGreeting</span><span class=p>(</span><span class=nx>data</span><span class=p>.</span><span class=nx>greeting</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>form</span> <span class=na>onSubmit</span><span class=o>=</span><span class=p>{</span><span class=nx>loadGreetingForInput</span><span class=p>}&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>label</span> <span class=na>htmlFor</span><span class=o>=</span><span class=s>&#34;name&#34;</span><span class=p>&gt;</span><span class=nx>Name</span><span class=p>&lt;/</span><span class=nt>label</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>input</span> <span class=na>id</span><span class=o>=</span><span class=s>&#34;name&#34;</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>button</span> <span class=na>type</span><span class=o>=</span><span class=s>&#34;submit&#34;</span><span class=p>&gt;</span><span class=nx>Load</span> <span class=nx>Greeting</span><span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>div</span> <span class=na>aria</span><span class=err>-</span><span class=na>label</span><span class=o>=</span><span class=s>&#34;greeting&#34;</span><span class=p>&gt;{</span><span class=nx>greeting</span><span class=p>}&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>form</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=p>{</span> <span class=nx>GreetingLoader</span> <span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=c1>// greeting-loader.test.ts
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>render</span><span class=p>,</span> <span class=nx>screen</span><span class=p>,</span> <span class=nx>waitFor</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=nx>userEvent</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/user-event&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>loadGreeting</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../api&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>GreetingLoader</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../greeting-loader&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>jest</span><span class=p>.</span><span class=nx>mock</span><span class=p>(</span><span class=s2>&#34;../api&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;loads greetings on click&#34;</span><span class=p>,</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>testGreeting</span> <span class=o>=</span> <span class=s2>&#34;TEST_GREETING&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>loadGreeting</span><span class=p>.</span><span class=nx>mockResolvedValueOnce</span><span class=p>({</span> <span class=nx>data</span><span class=o>:</span> <span class=p>{</span> <span class=nx>greeting</span>: <span class=kt>testGreeting</span> <span class=p>}</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>GreetingLoader</span> <span class=p>/&gt;);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>nameInput</span> <span class=o>=</span> <span class=nx>screen</span><span class=p>.</span><span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/name/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>loadButton</span> <span class=o>=</span> <span class=nx>screen</span><span class=p>.</span><span class=nx>getByText</span><span class=p>(</span><span class=sr>/load/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>await</span> <span class=nx>userEvent</span><span class=p>.</span><span class=kr>type</span><span class=p>(</span><span class=nx>nameInput</span><span class=p>,</span> <span class=s2>&#34;Mary&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>await</span> <span class=nx>userEvent</span><span class=p>.</span><span class=nx>click</span><span class=p>(</span><span class=nx>loadButton</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>loadGreeting</span><span class=p>).</span><span class=nx>toHaveBeenCalledWith</span><span class=p>(</span><span class=s2>&#34;Mary&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>loadGreeting</span><span class=p>).</span><span class=nx>toHaveBeenCalledTimes</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// waitFor uses `act()` for state updates for us
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>await</span> <span class=nx>waitFor</span><span class=p>(()</span> <span class=o>=&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/greeting/i</span><span class=p>)).</span><span class=nx>toHaveTextContent</span><span class=p>(</span><span class=nx>testGreeting</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#mocking-http-with-msw><h2 id=mocking-http-with-msw><span class=hanchor arialabel=Anchor># </span>Mocking HTTP with <code>msw</code></h2></a><p>It would be nice addition to make sure that the API module is working properly when testing the components that are interacting with that module.</p><p>That would require us to actually interact with the API, but the requests would be intercepted. To intercept requests we need to setup the <code>msw</code> server intercepting them first.</p><p>Also, because the tests are ran in Node.js environment we need to polyfill the <code>fetch</code> module with <code>whatwg-fetch</code>.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=s2>&#34;whatwg-fetch&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>render</span><span class=p>,</span> <span class=nx>screen</span><span class=p>,</span> <span class=nx>waitFor</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=nx>userEvent</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/user-event&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>rest</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;msw&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>setupServer</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;msw/node&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>GreetingLoader</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../greeting-loader-01-mocking&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>server</span> <span class=o>=</span> <span class=nx>setupServer</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=nx>rest</span><span class=p>.</span><span class=nx>post</span><span class=p>(</span><span class=s2>&#34;/greeting&#34;</span><span class=p>,</span> <span class=p>(</span><span class=nx>req</span><span class=p>,</span> <span class=nx>res</span><span class=p>,</span> <span class=nx>ctx</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>res</span><span class=p>(</span><span class=nx>ctx</span><span class=p>.</span><span class=nx>json</span><span class=p>({</span> <span class=nx>data</span><span class=o>:</span> <span class=p>{</span> <span class=nx>greeting</span><span class=o>:</span> <span class=sb>`Hello </span><span class=si>${</span><span class=nx>req</span><span class=p>.</span><span class=nx>body</span><span class=p>.</span><span class=nx>subject</span><span class=si>}</span><span class=sb>`</span> <span class=p>}</span> <span class=p>}));</span>
+</span></span><span class=line><span class=cl>  <span class=p>}),</span>
+</span></span><span class=line><span class=cl><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>beforeAll</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=nx>server</span><span class=p>.</span><span class=nx>listen</span><span class=p>({</span> <span class=nx>onUnhandledRequest</span><span class=o>:</span> <span class=s2>&#34;error&#34;</span> <span class=p>}));</span> <span class=c1>// start the server
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>afterAll</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=nx>server</span><span class=p>.</span><span class=nx>close</span><span class=p>());</span>
+</span></span><span class=line><span class=cl><span class=nx>afterEach</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=nx>server</span><span class=p>.</span><span class=nx>resetHandlers</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;loads greetings on click&#34;</span><span class=p>,</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>GreetingLoader</span> <span class=p>/&gt;);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>nameInput</span> <span class=o>=</span> <span class=nx>screen</span><span class=p>.</span><span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/name/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>loadButton</span> <span class=o>=</span> <span class=nx>screen</span><span class=p>.</span><span class=nx>getByText</span><span class=p>(</span><span class=sr>/load/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>await</span> <span class=nx>userEvent</span><span class=p>.</span><span class=kr>type</span><span class=p>(</span><span class=nx>nameInput</span><span class=p>,</span> <span class=s2>&#34;Mary&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>await</span> <span class=nx>userEvent</span><span class=p>.</span><span class=nx>click</span><span class=p>(</span><span class=nx>loadButton</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>await</span> <span class=nx>waitFor</span><span class=p>(()</span> <span class=o>=&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/greeting/i</span><span class=p>)).</span><span class=nx>toHaveTextContent</span><span class=p>(</span><span class=s2>&#34;Hello Mary&#34;</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>The cool part is that if we were to make some sort of mistake, not just in our component, but also in our client request, then we would catch that with this arguably simpler test. We also get a higher coverage.</p><a href=#custom-rendercomponent-fns-to-simplify-tests><h2 id=custom-rendercomponent-fns-to-simplify-tests><span class=hanchor arialabel=Anchor># </span>Custom <code>renderComponent</code> fns to simplify tests</h2></a><p>Having a custom <code>render[Component]</code> fn allows to simplify the test code:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kd>function</span> <span class=nx>renderEditor() {</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>fakeUser</span> <span class=o>=</span> <span class=nx>userBuilder</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>utils</span> <span class=o>=</span> <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>Editor</span> <span class=na>user</span><span class=o>=</span><span class=p>{</span><span class=nx>fakeUser</span><span class=p>}</span> <span class=p>/&gt;)</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>fakePost</span> <span class=o>=</span> <span class=nx>postBuilder</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>screen</span><span class=p>.</span><span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/title/i</span><span class=p>).</span><span class=nx>value</span> <span class=o>=</span> <span class=nx>fakePost</span><span class=p>.</span><span class=nx>title</span>
+</span></span><span class=line><span class=cl>  <span class=nx>screen</span><span class=p>.</span><span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/content/i</span><span class=p>).</span><span class=nx>value</span> <span class=o>=</span> <span class=nx>fakePost</span><span class=p>.</span><span class=nx>content</span>
+</span></span><span class=line><span class=cl>  <span class=nx>screen</span><span class=p>.</span><span class=nx>getByLabelText</span><span class=p>(</span><span class=sr>/tags/i</span><span class=p>).</span><span class=nx>value</span> <span class=o>=</span> <span class=nx>fakePost</span><span class=p>.</span><span class=nx>tags</span><span class=p>.</span><span class=nx>join</span><span class=p>(</span><span class=s1>&#39;, &#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>submitButton</span> <span class=o>=</span> <span class=nx>screen</span><span class=p>.</span><span class=nx>getByText</span><span class=p>(</span><span class=sr>/submit/i</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=p>...</span><span class=nx>utils</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>submitButton</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>fakeUser</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>fakePost</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s1>&#39;renders a form with title, content, tags, and a submit button&#39;</span><span class=p>,</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>{</span><span class=nx>submitButton</span><span class=p>,</span> <span class=nx>fakePost</span><span class=p>,</span> <span class=nx>fakeUser</span><span class=p>}</span> <span class=o>=</span> <span class=nx>renderEditor</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=cm>/* [...] */</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#custom-history-implementation-within-react-router><h2 id=custom-history-implementation-within-react-router><span class=hanchor arialabel=Anchor># </span>Custom <code>history</code> implementation within <code>react-router</code></h2></a><p>Mocking the <code>&lt;Redirect /></code> component in <code>react-router</code> works, but it’s imperfect because we don’t know for sure that the user will be redirected properly.</p><p>Normally we&rsquo;d import <code>BrowserRouter</code>, but in tests we import <code>MemoryRouter</code> so we can manually control the <code>history</code> object.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>MemoryRouter</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;react-router-dom&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>render</span> <span class=kr>as</span> <span class=nx>rtlRender</span><span class=p>,</span> <span class=nx>screen</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=nx>userEvent</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/user-event&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>Main</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../main&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>render</span><span class=p>(</span><span class=nx>ui</span><span class=p>,</span> <span class=p>{</span> <span class=nx>route</span> <span class=o>=</span> <span class=s2>&#34;/&#34;</span><span class=p>,</span> <span class=p>...</span><span class=nx>renderOptions</span> <span class=p>}</span> <span class=o>=</span> <span class=p>{})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>function</span> <span class=nx>Wrapper</span><span class=p>({</span> <span class=nx>children</span> <span class=p>})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>&lt;</span><span class=nt>MemoryRouter</span> <span class=na>initialEntries</span><span class=o>=</span><span class=p>{[</span><span class=nx>route</span><span class=p>]}&gt;{</span><span class=nx>children</span><span class=p>}&lt;/</span><span class=nt>MemoryRouter</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>rtlRender</span><span class=p>(</span><span class=nx>ui</span><span class=p>,</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>wrapper</span>: <span class=kt>Wrapper</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>...</span><span class=nx>renderOptions</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;main renders about and home and I can navigate to those pages&#34;</span><span class=p>,</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>Main</span> <span class=p>/&gt;);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>getByRole</span><span class=p>(</span><span class=s2>&#34;heading&#34;</span><span class=p>)).</span><span class=nx>toHaveTextContent</span><span class=p>(</span><span class=sr>/home/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>await</span> <span class=nx>userEvent</span><span class=p>.</span><span class=nx>click</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>getByText</span><span class=p>(</span><span class=sr>/about/i</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>getByRole</span><span class=p>(</span><span class=s2>&#34;heading&#34;</span><span class=p>)).</span><span class=nx>toHaveTextContent</span><span class=p>(</span><span class=sr>/about/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;landing on a bad page shows no match component&#34;</span><span class=p>,</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>Main</span> <span class=p>/&gt;,</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>route</span><span class=o>:</span> <span class=s2>&#34;/something-that-does-not-match&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>screen</span><span class=p>.</span><span class=nx>getByRole</span><span class=p>(</span><span class=s2>&#34;heading&#34;</span><span class=p>)).</span><span class=nx>toHaveTextContent</span><span class=p>(</span><span class=sr>/404/i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p><a class="internal-link broken">testing-redux</a>
+<a class="internal-link broken">testing-hooks</a></p><a href=#testing-the-unmounting-of-the-component><h2 id=testing-the-unmounting-of-the-component><span class=hanchor arialabel=Anchor># </span>Testing the unmounting of the component</h2></a><p>Let&rsquo;s assume we have the <code>Countdown</code> function component that will cleanup in <code>useEffect</code>/<code>useLayoutEffect</code>/<code>componentWillUnmount</code>.</p><blockquote class=tip-callout><p><code>testing-library</code> doesn&rsquo;t care about component type</p><p>The test case can be the same for both class and function components.</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>useEffect</span><span class=p>,</span> <span class=nx>useRef</span><span class=p>,</span> <span class=nx>useState</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>Countdown() {</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>[</span><span class=nx>remainingTime</span><span class=p>,</span> <span class=nx>setRemainingTime</span><span class=p>]</span> <span class=o>=</span> <span class=nx>useState</span><span class=p>(</span><span class=mi>10000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>end</span> <span class=o>=</span> <span class=nx>useRef</span><span class=p>(</span><span class=k>new</span> <span class=nb>Date</span><span class=p>().</span><span class=nx>getTime</span><span class=p>()</span> <span class=o>+</span> <span class=nx>remainingTime</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>useEffect</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>interval</span> <span class=o>=</span> <span class=nx>setInterval</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>newRemainingTime</span> <span class=o>=</span> <span class=nx>end</span><span class=p>.</span><span class=nx>current</span> <span class=o>-</span> <span class=k>new</span> <span class=nb>Date</span><span class=p>().</span><span class=nx>getTime</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>newRemainingTime</span> <span class=o>&lt;=</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>clearInterval</span><span class=p>(</span><span class=nx>interval</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>setRemainingTime</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>setRemainingTime</span><span class=p>(</span><span class=nx>newRemainingTime</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=nx>clearInterval</span><span class=p>(</span><span class=nx>interval</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span> <span class=p>[]);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>remainingTime</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=p>{</span> <span class=nx>Countdown</span> <span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=c1>// countdown.test.tsx
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s2>&#34;react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>render</span><span class=p>,</span> <span class=nx>act</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;@testing-library/react&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>Countdown</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;../countdown&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// keeping `console.error` out of the way in test output
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>beforeAll</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>jest</span><span class=p>.</span><span class=nx>spyOn</span><span class=p>(</span><span class=nx>console</span><span class=p>,</span> <span class=s2>&#34;error&#34;</span><span class=p>).</span><span class=nx>mockImplementation</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{});</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>afterAll</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>.</span><span class=nx>mockRestore</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>afterEach</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>jest</span><span class=p>.</span><span class=nx>clearAllMocks</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=nx>jest</span><span class=p>.</span><span class=nx>useRealTimers</span><span class=p>();</span> <span class=c1>// this re-enables normal intervals/timers so the other tests can use them. just in case.
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>(</span><span class=s2>&#34;does not attempt to set state when unmounted (to prevent memory leaks)&#34;</span><span class=p>,</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>jest</span><span class=p>.</span><span class=nx>useFakeTimers</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>{</span> <span class=nx>unmount</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>render</span><span class=p>(&lt;</span><span class=nt>Countdown</span> <span class=p>/&gt;);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>unmount</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=nx>act</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=nx>jest</span><span class=p>.</span><span class=nx>runOnlyPendingTimers</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>  <span class=nx>expect</span><span class=p>(</span><span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>).</span><span class=nx>not</span><span class=p>.</span><span class=nx>toHaveBeenCalled</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>To simulate unmounting the component, we&rsquo;re using <code>unmount</code> from <code>render</code> fn.</p><p>To make sure every intervals were cleared properly, we can use <code></code>jest.useFakeTimers()<code>and</code>jest.runOnlyPendingTimers()`. The former will make sure the timers will run way quicker.</p><p>After umnounting, we&rsquo;re calling <code>jest.runOnlyPendingTimers()</code> to see if there were any non-cleared intervals (we need to wrap it in <code>act</code>). 8</p><p>Without proper cleanup in the component, the error would be thrown here (that&rsquo;s why we&rsquo;re expecting errors not to be thrown).</p><p><a class="internal-link broken">integration-tests-using-rtl</a></p></article><hr><div class=directories><h3>index<span>_</span></h3><div class=items><div class=item><a href=https://kkoscielniak.github.io/the-garden/development/testing-javascript/jest/integration-tests-using-rtl/ class=file data-src=/the-garden/development/testing-javascript/jest/integration-tests-using-rtl/>Integration tests using Testing Library.md</a></div><div class=item><a href=https://kkoscielniak.github.io/the-garden/development/testing-javascript/jest/tdd-with-ui-in-testing-library/ class=file data-src=/the-garden/development/testing-javascript/jest/tdd-with-ui-in-testing-library/>TDD with UI in React Testing Library.md</a></div><div class=item><a href=https://kkoscielniak.github.io/the-garden/development/testing-javascript/jest/testing-components/ class=file data-src=/the-garden/development/testing-javascript/jest/testing-components/>Testing components with Jest and React Testing Library.md</a></div><div class=item><a href=https://kkoscielniak.github.io/the-garden/development/testing-javascript/jest/testing-hooks/ class=file data-src=/the-garden/development/testing-javascript/jest/testing-hooks/>Testing custom React hooks.md</a></div><div class=item><a href=https://kkoscielniak.github.io/the-garden/development/testing-javascript/jest/testing-portals/ class=file data-src=/the-garden/development/testing-javascript/jest/testing-portals/>Testing React portals.md</a></div><div class=item><a href=https://kkoscielniak.github.io/the-garden/development/testing-javascript/jest/testing-redux/ class=file data-src=/the-garden/development/testing-javascript/jest/testing-redux/>Testing Redux.md</a></div><div class=item><a href=https://kkoscielniak.github.io/the-garden/development/testing-javascript/jest/fake-data/ class=file data-src=/the-garden/development/testing-javascript/jest/fake-data/>Using fake data in tests.md</a></div></div></div><div class=page-end id=footer><div class=backlinks-container><h3>backlinks_</h3><ul class=backlinks><li>No backlinks found</li></ul></div><div><script src=https://cdn.jsdelivr.net/npm/d3@6.7.0/dist/d3.min.js integrity="sha256-+7jaYCp29O1JusNWHaYtgUn6EhuP0VaFuswhNV06MyI=" crossorigin=anonymous></script><h3>knowledge graph_</h3><div id=graph-container></div><style>:root{--g-node:var(--secondary);--g-node-active:var(--primary);--g-node-inactive:var(--visited);--g-link:var(--outlinegray);--g-link-active:#5a7282}</style><script src=https://kkoscielniak.github.io/the-garden/js/graph.abd4bc2af3869a96524d7d23b76152c7.js></script></div></div><div id=contact_buttons><footer><p>crafted by kkoscielniak. built using <a href=https://github.com/jackyzha0/quartz>quartz</a></p><ul><li><a href=https://kkoscielniak.github.io/the-garden>Home</a></li><li><a href=https://instagram.com/pankoscielniak>insta</a></li><li><a href=https://github.com/kkoscielniak>github</a></li></ul></footer></div></div></body></html>
