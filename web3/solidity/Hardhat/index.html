@@ -1,0 +1,205 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=description content="Hardhat is a development environment for [[web3/Smart contracts]] that aids editing, compiling, debugging and deploying smart contracts and [[dApps]]."><title>Hardhat</title><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" type=image/png href=https://koscielniak.pro/icon.png><link href=https://koscielniak.pro/styles.9795826ea4fa61978dfd826a4365a859.min.css rel=stylesheet><link href=https://koscielniak.pro/styles/_light_syntax.86a48a52faebeaaf42158b72922b1c90.min.css rel=stylesheet id=theme-link><script src=https://koscielniak.pro/js/darkmode.65e02719d0d9967e13e7b6186bd55800.min.js></script>
+<script src=https://koscielniak.pro/js/util.5e39932758f9ecaf45fd54506ed61416.min.js></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css integrity=sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js integrity=sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js integrity=sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/copy-tex.min.js integrity=sha384-ww/583aHhxWkz5DEVn6OKtNiIaLi2iBRNZXfJRiY1Ai7tnJ9UXpEsyvOITVpTl4A crossorigin=anonymous></script>
+<script src=https://unpkg.com/@floating-ui/core@0.7.3></script>
+<script src=https://unpkg.com/@floating-ui/dom@0.5.4></script>
+<script src=https://koscielniak.pro/js/popover.6da9b273c092cc16fc1aa904d71a2163.min.js></script>
+<script src=https://koscielniak.pro/js/code-title.b35124ad8db0ba37162b886afb711cbc.min.js></script>
+<script src=https://koscielniak.pro/js/clipboard.c20857734e53a3fb733b7443879efa61.min.js></script>
+<script src=https://koscielniak.pro/js/callouts.7723cac461d613d118ee8bb8216b9838.min.js></script>
+<script>const SEARCH_ENABLED=!1,LATEX_ENABLED=!0,PRODUCTION=!0,BASE_URL="https://koscielniak.pro",fetchData=Promise.all([fetch("https://koscielniak.pro/indices/linkIndex.6ab1a2ecb15d75d25c5792fd1b8799ea.min.json").then(e=>e.json()).then(e=>({index:e.index,links:e.links})),fetch("https://koscielniak.pro/indices/contentIndex.249d184c34f00fe60122fc4c8b0705d8.min.json").then(e=>e.json())]).then(([{index:e,links:t},n])=>({index:e,links:t,content:n})),render=()=>{const e=new URL(BASE_URL),t=e.pathname,n=window.location.pathname,s=t==n;addCopyButtons(),addTitleToCodeBlocks(),addCollapsibleCallouts(),initPopover("https://koscielniak.pro",!0);const o=document.getElementById("footer");if(o){const e=document.getElementById("graph-container");if(!e)return requestAnimationFrame(render);e.textContent="";const t=s&&!1;drawGraph("https://koscielniak.pro",t,[{"/moc":"#4388cc"}],t?{centerForce:1,depth:-1,enableDrag:!0,enableLegend:!1,enableZoom:!0,fontSize:.5,linkDistance:1,opacityScale:3,repelForce:1,scale:1.4}:{centerForce:1,depth:1,enableDrag:!0,enableLegend:!1,enableZoom:!0,fontSize:.6,linkDistance:1,opacityScale:3,repelForce:2,scale:1.2})}var i=document.getElementsByClassName("mermaid");i.length>0&&import("https://unpkg.com/mermaid@9/dist/mermaid.esm.min.mjs").then(e=>{e.default.init()})},init=(e=document)=>{addCopyButtons(),addTitleToCodeBlocks(),renderMathInElement(e.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}],macros:{'’':"'"},throwOnError:!1})}</script><script type=module>
+    import { attachSPARouting } from "https:\/\/koscielniak.pro\/js\/router.9d4974281069e9ebb189f642ae1e3ca2.min.js"
+    attachSPARouting(init, render)
+  </script></head><body><div id=search-container><div id=search-space><input autocomplete=off id=search-bar name=search type=text aria-label=Search placeholder="Search for something..."><div id=results-container></div></div></div><script src=https://cdn.jsdelivr.net/npm/flexsearch@0.7.21/dist/flexsearch.bundle.js integrity="sha256-i3A0NZGkhsKjVMzFxv3ksk0DZh3aXqu0l49Bbh0MdjE=" crossorigin=anonymous defer></script>
+<script defer src=https://koscielniak.pro/js/full-text-search.51f0b1753e9b30839d053f8a98cc20d1.min.js></script><div class=singlePage><header><h1 id=page-title><a href=https://koscielniak.pro>🍍 koscielniak.pro</a></h1><div class=spacer></div><div id=search-icon><p>⌘+K</p><svg tabindex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search Icon</title><desc id="desc">Icon to open search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"/><circle cx="8" cy="8" r="7"/></g></svg></div><div class=darkmode><input class=toggle id=darkmode-toggle type=checkbox tabindex=-1>
+<label id=toggle-label-light for=darkmode-toggle tabindex=-1><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="dayIcon" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35"><title>Light Mode</title><path d="M6 17.5C6 16.672 5.328 16 4.5 16h-3C.672 16 0 16.672.0 17.5S.672 19 1.5 19h3C5.328 19 6 18.328 6 17.5zM7.5 26c-.414.0-.789.168-1.061.439l-2 2C4.168 28.711 4 29.086 4 29.5 4 30.328 4.671 31 5.5 31c.414.0.789-.168 1.06-.44l2-2C8.832 28.289 9 27.914 9 27.5 9 26.672 8.329 26 7.5 26zm10-20C18.329 6 19 5.328 19 4.5v-3C19 .672 18.329.0 17.5.0S16 .672 16 1.5v3C16 5.328 16.671 6 17.5 6zm10 3c.414.0.789-.168 1.06-.439l2-2C30.832 6.289 31 5.914 31 5.5 31 4.672 30.329 4 29.5 4c-.414.0-.789.168-1.061.44l-2 2C26.168 6.711 26 7.086 26 7.5 26 8.328 26.671 9 27.5 9zM6.439 8.561C6.711 8.832 7.086 9 7.5 9 8.328 9 9 8.328 9 7.5c0-.414-.168-.789-.439-1.061l-2-2C6.289 4.168 5.914 4 5.5 4 4.672 4 4 4.672 4 5.5c0 .414.168.789.439 1.06l2 2.001zM33.5 16h-3c-.828.0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5h3c.828.0 1.5-.672 1.5-1.5S34.328 16 33.5 16zM28.561 26.439C28.289 26.168 27.914 26 27.5 26c-.828.0-1.5.672-1.5 1.5.0.414.168.789.439 1.06l2 2C28.711 30.832 29.086 31 29.5 31c.828.0 1.5-.672 1.5-1.5.0-.414-.168-.789-.439-1.061l-2-2zM17.5 29c-.829.0-1.5.672-1.5 1.5v3c0 .828.671 1.5 1.5 1.5s1.5-.672 1.5-1.5v-3C19 29.672 18.329 29 17.5 29zm0-22C11.71 7 7 11.71 7 17.5S11.71 28 17.5 28 28 23.29 28 17.5 23.29 7 17.5 7zm0 18c-4.136.0-7.5-3.364-7.5-7.5s3.364-7.5 7.5-7.5 7.5 3.364 7.5 7.5S21.636 25 17.5 25z"/></svg></label><label id=toggle-label-dark for=darkmode-toggle tabindex=-1><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="nightIcon" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'"><title>Dark Mode</title><path d="M96.76 66.458c-.853-.852-2.15-1.064-3.23-.534-6.063 2.991-12.858 4.571-19.655 4.571C62.022 70.495 50.88 65.88 42.5 57.5 29.043 44.043 25.658 23.536 34.076 6.47c.532-1.08.318-2.379-.534-3.23-.851-.852-2.15-1.064-3.23-.534-4.918 2.427-9.375 5.619-13.246 9.491-9.447 9.447-14.65 22.008-14.65 35.369.0 13.36 5.203 25.921 14.65 35.368s22.008 14.65 35.368 14.65c13.361.0 25.921-5.203 35.369-14.65 3.872-3.871 7.064-8.328 9.491-13.246C97.826 68.608 97.611 67.309 96.76 66.458z"/></svg></label></div></header><article><h1>Hardhat</h1><p class=meta>Last updated
+Unknown
+<a href=https://github.com/kkoscielniak/the-garden/web3/solidity/Hardhat.md rel=noopener>Edit Source</a></p><ul class=tags><li><a href=https://koscielniak.pro/tags/web3/>Web3</a></li><li><a href=https://koscielniak.pro/tags/development/>Development</a></li></ul><aside class=mainTOC><details><summary>Table of Contents</summary><nav id=TableOfContents><ol><li><a href=#hre><code>hre</code></a></li><li><a href=#hardhatconfigjs><code>hardhat.config.js</code></a></li><li><a href=#runts-and-deployts><code>run.ts</code> and <code>deploy.ts</code></a><ol><li><a href=#runts><code>run.ts</code></a></li><li><a href=#deployts><code>deploy.ts</code></a></li><li><a href=#funding-the-contract>Funding the contract</a></li></ol></li><li><a href=#hardhat-node><code>hardhat node</code></a></li><li><a href=#hardhat-for-vs-code>Hardhat for VS Code</a></li><li><a href=#consolelog><code>console.log</code></a></li></ol></nav></details></aside><p><a href=https://hardhat.org/docs rel=noopener>Hardhat</a> is a development environment for <a class="internal-link broken">Smart contracts</a> that aids editing, compiling, debugging and deploying smart contracts and <a class="internal-link broken">dApps</a>.</p><p>In practice it&rsquo;s a local development enviroment for <a href=/web3/solidity/Solidity rel=noopener class=internal-link data-src=/web3/solidity/Solidity>Solidity</a> that spins up the <a class="internal-link broken">Ethereum network</a> for development and gives you fake ETH, and fake test accounts to work with the smart contract being developed. Also, it handles the <code>owner</code> address for you as well.</p><a href=#hre><h2 id=hre><span class=hanchor arialabel=Anchor># </span><code>hre</code></h2></a><p>HRE (the <em>Hardhat Runtime Environment</em>) is an object containing all the functionality Hardhat exposes when running a task, test or script.</p><p>Every time you run a <code>hardhat</code> command the <code>hre</code> object is built on the fly using the <code>hardhat.config.js</code>.</p><a href=#hardhatconfigjs><h2 id=hardhatconfigjs><span class=hanchor arialabel=Anchor># </span><code>hardhat.config.js</code></h2></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>HardhatUserConfig</span> <span class=p>}</span> <span class=kr>from</span> <span class=s2>&#34;hardhat/config&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=s2>&#34;@nomicfoundation/hardhat-toolbox&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>require</span><span class=p>(</span><span class=s2>&#34;dotenv&#34;</span><span class=p>).</span><span class=nx>config</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>config</span>: <span class=kt>HardhatUserConfig</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>solidity</span><span class=o>:</span> <span class=s2>&#34;0.8.17&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>networks</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>goerli</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>url</span>: <span class=kt>process.env.STAGING_QUICKNODE_KEY</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>accounts</span><span class=o>:</span> <span class=p>[</span><span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>PRIVATE_KEY</span><span class=o>!</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=k>default</span> <span class=nx>config</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Defines the <a href=/web3/solidity/Solidity rel=noopener class=internal-link data-src=/web3/solidity/Solidity>Solidity</a> version to be used and <a href=/web3/blockchain rel=noopener class=internal-link data-src=/web3/blockchain>blockchain</a>s to target.</p><blockquote class=danger-callout><p>Mind the compiler version</p><p>The compiler version set by <a href=/web3/solidity/pragma rel=noopener class=internal-link data-src=/web3/solidity/pragma>pragma</a>s in <code>*.sol</code> files has to be the same as in <code>hardhat.config.js</code>.</p></blockquote><p>In this case the <a href=/web3/ethereum/goerli rel=noopener class=internal-link data-src=/web3/ethereum/goerli>Goerli network</a> is defined through <a href=/web3/QuickNode rel=noopener class=internal-link data-src=/web3/QuickNode>QuickNode</a>:</p><ul><li><code>STAGING_QUICKNODE_KEY</code> - an endpoint created in <a href=/web3/QuickNode rel=noopener class=internal-link data-src=/web3/QuickNode>QuickNode</a></li><li><code>PRIVATE_KEY</code> - a <strong>private</strong> key of the <a href=/web3/crypto-wallet rel=noopener class=internal-link data-src=/web3/crypto-wallet>crypto-wallet</a> used for deploying the <a class="internal-link broken">contract</a>.<ul><li>this can be taken from <a class="internal-link broken">MetaMask</a></li></ul></li></ul><a href=#runts-and-deployts><h2 id=runts-and-deployts><span class=hanchor arialabel=Anchor># </span><code>run.ts</code> and <code>deploy.ts</code></h2></a><p>Hardhat can be used to locally run the smart contract and to deploy it to an Ethereum network.</p><p>Typically it&rsquo;s good to create 2 files in <code>/scripts/</code>:</p><ul><li><code>run.ts</code></li><li><code>deploy.ts</code></li></ul><blockquote class=danger-callout><p>Hardhat is very strict about project tree</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>npx hardhat run scripts/run.ts
+</span></span><span class=line><span class=cl>npx hardhat run scripts/deploy.ts --network goerli
+</span></span></code></pre></td></tr></table></div></div><a href=#runts><h3 id=runts><span class=hanchor arialabel=Anchor># </span><code>run.ts</code></h3></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>npx hardhat run scripts/run.ts
+</span></span></code></pre></td></tr></table></div></div><p>Used for compiling the smart contract, running it, testing and debugging locally.</p><p>Hardhat will create a local Ethereum network, just for this contract. After the script completes it&rsquo;ll destroy that local network. Every time you run the contract, it&rsquo;ll be a fresh blockchain.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=c1>// WavePortal is the contract name
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>main</span> <span class=o>=</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// get an owner and the non-owner addresses for testing
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=p>[</span><span class=nx>owner</span><span class=p>,</span> <span class=nx>randomPerson</span><span class=p>]</span> <span class=o>=</span> <span class=k>await</span> <span class=nx>hre</span><span class=p>.</span><span class=nx>ethers</span><span class=p>.</span><span class=nx>getSigners</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// compile the contract and generate necessary files under `/artifacts` dir
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>waveContractFactory</span> <span class=o>=</span> <span class=k>await</span> <span class=nx>hre</span><span class=p>.</span><span class=nx>ethers</span><span class=p>.</span><span class=nx>getContractFactory</span><span class=p>(</span><span class=s2>&#34;WavePortal&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// deploy the smart contract to a local network and wait for the deployment to finish
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>waveContract</span> <span class=o>=</span> <span class=k>await</span> <span class=nx>waveContractFactory</span><span class=p>.</span><span class=nx>deploy</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=k>await</span> <span class=nx>waveContract</span><span class=p>.</span><span class=nx>deployed</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s2>&#34;Contract deployed to:&#34;</span><span class=p>,</span> <span class=nx>waveContract</span><span class=p>.</span><span class=nx>address</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s2>&#34;Contract deployed by:&#34;</span><span class=p>,</span> <span class=nx>owner</span><span class=p>.</span><span class=nx>address</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// get waves from `view` function
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>await</span> <span class=nx>waveContract</span><span class=p>.</span><span class=nx>getTotalWaves</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// make wave transactino
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>waveTxn</span> <span class=o>=</span> <span class=k>await</span> <span class=nx>waveContract</span><span class=p>.</span><span class=nx>wave</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// wait for the transaction to be mined
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>await</span> <span class=nx>waveTxn</span><span class=p>.</span><span class=nx>wait</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=k>await</span> <span class=nx>waveContract</span><span class=p>.</span><span class=nx>getTotalWaves</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>runMain</span> <span class=o>=</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>try</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>await</span> <span class=nx>main</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=nx>process</span><span class=p>.</span><span class=nx>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>error</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>process</span><span class=p>.</span><span class=nx>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>runMain</span><span class=p>();</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#deployts><h3 id=deployts><span class=hanchor arialabel=Anchor># </span><code>deploy.ts</code></h3></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>npx hardhat run scripts/deploy.ts --network goerli
+</span></span></code></pre></td></tr></table></div></div><p>Used to deploy to a real blockchain (in this case to <a href=/web3/ethereum/goerli rel=noopener class=internal-link data-src=/web3/ethereum/goerli>Goerli Testnet</a>).</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>const</span> <span class=nx>main</span> <span class=o>=</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// get an owner address for deployment (the person who deploys)
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=p>[</span><span class=nx>deployer</span><span class=p>]</span> <span class=o>=</span> <span class=k>await</span> <span class=nx>hre</span><span class=p>.</span><span class=nx>ethers</span><span class=p>.</span><span class=nx>getSigners</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// get the owners balance
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>accountBalance</span> <span class=o>=</span> <span class=k>await</span> <span class=nx>deployer</span><span class=p>.</span><span class=nx>getBalance</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s2>&#34;Deploying contracts with account: &#34;</span><span class=p>,</span> <span class=nx>deployer</span><span class=p>.</span><span class=nx>address</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s2>&#34;Account balance: &#34;</span><span class=p>,</span> <span class=nx>accountBalance</span><span class=p>.</span><span class=nx>toString</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>waveContractFactory</span> <span class=o>=</span> <span class=k>await</span> <span class=nx>hre</span><span class=p>.</span><span class=nx>ethers</span><span class=p>.</span><span class=nx>getContractFactory</span><span class=p>(</span><span class=s2>&#34;WavePortal&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>waveContract</span> <span class=o>=</span> <span class=k>await</span> <span class=nx>waveContractFactory</span><span class=p>.</span><span class=nx>deploy</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// funding the contract
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>value</span>: <span class=kt>hre.ethers.utils.parseEther</span><span class=p>(</span><span class=s2>&#34;0.001&#34;</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=k>await</span> <span class=nx>waveContract</span><span class=p>.</span><span class=nx>deployed</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s2>&#34;WavePortal address: &#34;</span><span class=p>,</span> <span class=nx>waveContract</span><span class=p>.</span><span class=nx>address</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>runMain</span> <span class=o>=</span> <span class=kr>async</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>try</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>await</span> <span class=nx>main</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=nx>process</span><span class=p>.</span><span class=nx>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>error</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>process</span><span class=p>.</span><span class=nx>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>runMain</span><span class=p>();</span>
+</span></span></code></pre></td></tr></table></div></div><a href=#funding-the-contract><h3 id=funding-the-contract><span class=hanchor arialabel=Anchor># </span>Funding the contract</h3></a><p>During the deployment it&rsquo;s possible to <em>fund</em> the contract so it can send money to the users who interact with it (e.g. for prizes).</p><a href=#hardhat-node><h2 id=hardhat-node><span class=hanchor arialabel=Anchor># </span><code>hardhat node</code></h2></a><p>Creates a local <a class="internal-link broken">Ethereum network</a> that stays alive until killed by <strong>CTRL + C</strong>.</p><a href=#hardhat-for-vs-code><h2 id=hardhat-for-vs-code><span class=hanchor arialabel=Anchor># </span>Hardhat for VS Code</h2></a><p>An extension that adds Solidity language support and provides editor integration for Hardhat-based projects.</p><a href=#consolelog><h2 id=consolelog><span class=hanchor arialabel=Anchor># </span><code>console.log</code></h2></a><p>Solidity doesn&rsquo;t have any <code>console.log</code> equivalent out-of-the-box. Hardhat fills that void with an implementation:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-solidity data-lang=solidity><span class=line><span class=cl><span class=kn>import</span> <span class=s>&#34;hardhat/console.sol&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>constructor</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>console</span><span class=p>.</span><span class=n>log</span><span class=p>(</span><span class=s>&#34;Here I am!&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></article><hr><div class=directories><h3>index<span>_</span></h3><div class=items><div class=item><a href=https://koscielniak.pro/web3/ethereum/Untitled/ class=file data-src=/web3/ethereum/Untitled/>.md</a></div><div class=item><a href=https://koscielniak.pro/web3/moc/ class=file data-src=/web3/moc/>.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/security/ class=file data-src=/web3/solidity/security/>.md</a></div><div class=item><a href=https://koscielniak.pro/web3/ABI/ class=file data-src=/web3/ABI/>ABI.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/address/ class=file data-src=/web3/solidity/address/>address function.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/approve/ class=file data-src=/web3/solidity/approve/>approve fn.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/assert/ class=file data-src=/web3/solidity/assert/>assert fn.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/balanceOf/ class=file data-src=/web3/solidity/balanceOf/>balanceOf function.md</a></div><div class=item><a href=https://koscielniak.pro/web3/blockchain/ class=file data-src=/web3/blockchain/>blockchain.md</a></div><div class=item><a href=https://koscielniak.pro/web3/ethereum/burning-token/ class=file data-src=/web3/ethereum/burning-token/>Burning tokens.md</a></div><div class=item><a href=https://koscielniak.pro/web3/Chainlink/ class=file data-src=/web3/Chainlink/>Chainlink.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/comments/ class=file data-src=/web3/solidity/comments/>Comments.md</a></div><div class=item><a href=https://koscielniak.pro/web3/crypto-wallet/ class=file data-src=/web3/crypto-wallet/>crypto wallet.md</a></div><div class=item><a href=https://koscielniak.pro/web3/don/ class=file data-src=/web3/don/>Decentralized Oracle Network.md</a></div><div class=item><a href=https://koscielniak.pro/web3/ethereum/ERC721/ class=file data-src=/web3/ethereum/ERC721/>ERC721 standard.md</a></div><div class=item><a href=https://koscielniak.pro/web3/ethereum/eth_accounts/ class=file data-src=/web3/ethereum/eth_accounts/>eth_accounts.md</a></div><div class=item><a href=https://koscielniak.pro/web3/ethereum/eth_requestAccounts/ class=file data-src=/web3/ethereum/eth_requestAccounts/>eth_requestAccounts.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/ether/ class=file data-src=/web3/solidity/ether/>ether keyword.md</a></div><div class=item><a href=https://koscielniak.pro/web3/ethereum/methods/ class=file data-src=/web3/ethereum/methods/>Ethereum network methods.md</a></div><div class=item><a href=https://koscielniak.pro/web3/frontend/ethers/ class=file data-src=/web3/frontend/ethers/>ethers.js.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/event/ class=file data-src=/web3/solidity/event/>event.md</a></div><div class=item><a href=https://koscielniak.pro/web3/frontend/frontend/ class=file data-src=/web3/frontend/frontend/>Front-end development in web3.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/function/ class=file data-src=/web3/solidity/function/>function.md</a></div><div class=item><a href=https://koscielniak.pro/web3/ethereum/gas-fee/ class=file data-src=/web3/ethereum/gas-fee/>gas fee.md</a></div><div class=item><a href=https://koscielniak.pro/web3/ethereum/goerli/ class=file data-src=/web3/ethereum/goerli/>Goerli Testnet.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/Hardhat/ class=file data-src=/web3/solidity/Hardhat/>Hardhat.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/inheritance/ class=file data-src=/web3/solidity/inheritance/>inheritance.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/libraries/ class=file data-src=/web3/solidity/libraries/>Libraries.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/mapping/ class=file data-src=/web3/solidity/mapping/>mapping.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/modifiers/ class=file data-src=/web3/solidity/modifiers/>modifiers.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/msg.sender/ class=file data-src=/web3/solidity/msg.sender/>msg.sender.md</a></div><div class=item><a href=https://koscielniak.pro/web3/oracle/ class=file data-src=/web3/oracle/>Oracle.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/overflows/ class=file data-src=/web3/solidity/overflows/>Overflows & Underflows.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/ownerOf/ class=file data-src=/web3/solidity/ownerOf/>ownerOf.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/erc721-ownership-transfer/ class=file data-src=/web3/solidity/erc721-ownership-transfer/>Ownership transfer in ERC721.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/payable/ class=file data-src=/web3/solidity/payable/>payable modifier.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/pragma/ class=file data-src=/web3/solidity/pragma/>pragma.md</a></div><div class=item><a href=https://koscielniak.pro/web3/frontend/Providers/ class=file data-src=/web3/frontend/Providers/>Providers.md</a></div><div class=item><a href=https://koscielniak.pro/web3/QuickNode/ class=file data-src=/web3/QuickNode/>QuickNode.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/require/ class=file data-src=/web3/solidity/require/>require function.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/SafeMath/ class=file data-src=/web3/solidity/SafeMath/>SafeMath.md</a></div><div class=item><a href=https://koscielniak.pro/web3/frontend/Signers/ class=file data-src=/web3/frontend/Signers/>Signers.md</a></div><div class=item><a href=https://koscielniak.pro/web3/single-point-of-failure/ class=file data-src=/web3/single-point-of-failure/>Single point of failure.md</a></div><div class=item><a href=https://koscielniak.pro/web3/smart-contracts/ class=file data-src=/web3/smart-contracts/>Smart contracts.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/Solidity/ class=file data-src=/web3/solidity/Solidity/>Solidity.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/state-variable/ class=file data-src=/web3/solidity/state-variable/>state variable.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/struct-packing/ class=file data-src=/web3/solidity/struct-packing/>struct packing.md</a></div><div class=item><a href=https://koscielniak.pro/web3/api-connectivity-problem/ class=file data-src=/web3/api-connectivity-problem/>The API Connectivity problem.md</a></div><div class=item><a href=https://koscielniak.pro/web3/ethereum/tokens/ class=file data-src=/web3/ethereum/tokens/>tokens.md</a></div><div class=item><a href=https://koscielniak.pro/web3/transaction/ class=file data-src=/web3/transaction/>transaction.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/transferFrom/ class=file data-src=/web3/solidity/transferFrom/>transferFrom function.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/variables/ class=file data-src=/web3/solidity/variables/>variable types.md</a></div><div class=item><a href=https://koscielniak.pro/web3/solidity/view/ class=file data-src=/web3/solidity/view/>view function modifier.md</a></div><div class=item><a href=https://koscielniak.pro/web3/resources/ class=file data-src=/web3/resources/>Web3 learning resources.md</a></div></div></div><div class=page-end id=footer><div class=backlinks-container><h3>backlinks_</h3><ul class=backlinks><li><a href=/web3/ABI/ data-ctx=web3/solidity/Hardhat data-src=/web3/ABI class=internal-link>ABI</a></li><li><a href=/web3/solidity/payable/ data-ctx=console.log data-src=/web3/solidity/payable class=internal-link>payable modifier</a></li></ul></div><div><script src=https://cdn.jsdelivr.net/npm/d3@6.7.0/dist/d3.min.js integrity="sha256-+7jaYCp29O1JusNWHaYtgUn6EhuP0VaFuswhNV06MyI=" crossorigin=anonymous></script><h3>knowledge graph_</h3><div id=graph-container></div><style>:root{--g-node:var(--secondary);--g-node-active:var(--primary);--g-node-inactive:var(--visited);--g-link:var(--outlinegray);--g-link-active:#5a7282}</style><script src=https://koscielniak.pro/js/graph.abd4bc2af3869a96524d7d23b76152c7.js></script></div></div><div id=contact_buttons><footer><p>crafted by kkoscielniak. built using <a href=https://github.com/jackyzha0/quartz>quartz</a></p><ul><li><a href=https://koscielniak.pro>Home</a></li><li><a href=https://instagram.com/pankoscielniak>insta</a></li><li><a href=https://github.com/kkoscielniak>github</a></li></ul></footer></div></div></body></html>
